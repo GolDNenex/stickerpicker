@@ -1,10 +1,14 @@
 /.idea
-
+/custom
 /.venv
 /env
 *.pyc
 __pycache__
 *.egg-info
+
+/build
+/dist
+/maunium_stickerpicker.egg-info
 
 node_modules
 web/lib/import-map.json
