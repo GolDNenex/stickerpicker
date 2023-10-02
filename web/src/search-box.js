@@ -13,77 +13,80 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import { html, Component } from "../lib/htm/preact.js"
-import { checkMobileSafari, checkAndroid } from "./user-agent-detect.js"
+import { html, Component } from "../lib/htm/preact.js";
+import { checkMobileSafari, checkAndroid } from "./user-agent-detect.js";
 
 export function shouldDisplayAutofocusSearchBar() {
-  return !checkMobileSafari() && !checkAndroid()
+	return !checkMobileSafari() && !checkAndroid();
 }
 
 export function shouldAutofocusSearchBar() {
-	return localStorage.mauAutofocusSearchBar === 'true' && shouldDisplayAutofocusSearchBar()
+	return (
+		localStorage.mauAutofocusSearchBar === "true" &&
+		shouldDisplayAutofocusSearchBar()
+	);
 }
 
 export function focusSearchBar() {
-	const inputInWebView = document.querySelector('.search-box input')
+	const inputInWebView = document.querySelector(".search-box input");
 	if (inputInWebView && shouldAutofocusSearchBar()) {
-		inputInWebView.focus()
+		inputInWebView.focus();
 	}
 }
 
 export class SearchBox extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 
-		this.autofocus = shouldAutofocusSearchBar()
-		this.value = props.value
-		this.onSearch = props.onSearch
-		this.onReset = props.onReset
+		this.autofocus = shouldAutofocusSearchBar();
+		this.value = props.value;
+		this.onSearch = props.onSearch;
+		this.onReset = props.onReset;
 
-		this.search = this.search.bind(this)
-		this.clearSearch = this.clearSearch.bind(this)
+		this.search = this.search.bind(this);
+		this.clearSearch = this.clearSearch.bind(this);
 	}
 
 	componentDidMount() {
-		focusSearchBar()
+		focusSearchBar();
 	}
 
 	componentWillReceiveProps(props) {
-		this.value = props.value
+		this.value = props.value;
 	}
 
 	search(e) {
 		if (e.key === "Escape") {
-			this.clearSearch()
-			return
+			this.clearSearch();
+			return;
 		}
-		this.onSearch(e.target.value)
+		this.onSearch(e.target.value);
 	}
 
 	clearSearch() {
-		this.onReset()
+		this.onReset();
 	}
 
 	render() {
-		const isEmpty = !this.value
+		const isEmpty = !this.value;
 
-		const className = `icon-display ${isEmpty ? null : 'reset-click-zone'}`
-		const title = isEmpty ? null : 'Click to reset'
-		const onClick = isEmpty ? null : this.clearSearch
-		const iconToDisplay = `icon-${isEmpty ? 'search' : 'reset'}`
+		const className = `icon-display ${isEmpty ? null : "reset-click-zone"}`;
+		const title = isEmpty ? null : "Click to reset";
+		const onClick = isEmpty ? null : this.clearSearch;
+		const iconToDisplay = `icon-${isEmpty ? "search" : "reset"}`;
 
 		return html`
 			<div class="search-box">
+				<div class=${className} title=${title} onClick=${onClick}>
+					<span class="icon ${iconToDisplay}" />
+				</div>
 				<input
 					placeholder="Find stickers …"
 					value=${this.value}
 					onKeyUp=${this.search}
-					autoFocus=${this.autofocus}
+					autofocus=${this.autofocus}
 				/>
-				<div class=${className} title=${title} onClick=${onClick}>
-					<span class="icon ${iconToDisplay}" />
-				</div>
 			</div>
-		`
+		`;
 	}
 }

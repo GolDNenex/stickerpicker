@@ -124,7 +124,8 @@ main[class="has-content theme-black"] {
 }
 
 .icon.icon-search {
-    --icon-image: url(../res/search.svg)
+    --icon-image: url(../res/search.svg);
+    background-color: #fffefe;
 }
 
 .icon.icon-reset {
